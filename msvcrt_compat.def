@@ -1,0 +1,5 @@
+LIBRARY msvcrt.dll
+EXPORTS
+    _setjmp
+    __argc DATA
+    __argv DATA
