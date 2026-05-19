@@ -6,6 +6,7 @@
 #include <iup.h>
 #include "devinfo.h"
 
+
 Ihandle *txt_boardname1, *txt_modelname1, *txt_bootmode1, *txt_featuremask1;
 Ihandle *txt_boardname2, *txt_modelname2, *txt_bootmode2, *txt_featuremask2;
 
@@ -356,7 +357,14 @@ Ihandle* MakeFieldRow(const char* label_text, Ihandle* text_ctrl) {
 }
 
 int main(int argc, char **argv) {
+    /* Set process code page to UTF-8 so Chinese strings display correctly */
+    SetConsoleCP(CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8);
+
     IupOpen(&argc, &argv);
+    /* Tell IUP to treat all strings as UTF-8 */
+    IupSetGlobal("UTF8MODE", "Yes");
+
 
     txt_boardname1 = IupText(NULL); IupSetAttribute(txt_boardname1, "EXPAND", "HORIZONTAL");
     txt_modelname1 = IupText(NULL); IupSetAttribute(txt_modelname1, "EXPAND", "HORIZONTAL");

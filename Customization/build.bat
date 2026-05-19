@@ -1,6 +1,6 @@
 @echo off
 echo Compiling IUP Customization (static)...
-PATH=D:\bin\Portable\mingw64-8.1.0\bin;%PATH%
+rem PATH=D:\bin\Portable\mingw64-8.1.0\bin;%PATH%
 gcc Customization.c -o Customization.exe ^
     -Os -s ^
     -ffunction-sections -fdata-sections -Wl,--gc-sections ^
@@ -11,7 +11,7 @@ gcc Customization.c -o Customization.exe ^
     -mwindows
 
 if %ERRORLEVEL% EQU 0 (
-    echo Build OK!  -> Customization.exe (static, no DLL needed)
+    echo Build OK!  -^> Customization.exe ^(static, no DLL needed^)
 ) else (
     echo Build FAILED!
 )
