@@ -56,7 +56,12 @@ void GetFeatureMaskString(unsigned int featureMask, char* out) {
         strcat(out, "ETHERNET");
         has = 1;
     }
-    unsigned int knownBits = FEATURE_ADD_LED | FEATURE_ADD_LCD | FEATURE_NO_BATT | FEATURE_ADD_ETHERNET;
+    if (featureMask & FEATURE_NO_POWER_KEY) {
+        if (has) strcat(out, ", ");
+        strcat(out, "NO_POWER_KEY");
+        has = 1;
+    }
+    unsigned int knownBits = FEATURE_ADD_LED | FEATURE_ADD_LCD | FEATURE_NO_BATT | FEATURE_ADD_ETHERNET | FEATURE_NO_POWER_KEY;
     unsigned int unknown = featureMask & ~knownBits;
     if (unknown) {
         if (has) strcat(out, ", ");
@@ -93,6 +98,9 @@ unsigned int ParseFeatureMask(const char* str) {
     unsigned int mask = 0;
     if (strstr(upper, "LED")) mask |= FEATURE_ADD_LED;
     if (strstr(upper, "LCD")) mask |= FEATURE_ADD_LCD;
+    if (strstr(upper, "NO_BATT")) mask |= FEATURE_NO_BATT;
+    if (strstr(upper, "ETHERNET")) mask |= FEATURE_ADD_ETHERNET;
+    if (strstr(upper, "NO_POWER_KEY")) mask |= FEATURE_NO_POWER_KEY;
     if (strstr(upper, "NONE")) mask = 0;
     
     if (mask == 0 && !strstr(upper, "NONE")) {

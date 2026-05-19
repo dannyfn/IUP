@@ -18,7 +18,7 @@
 #define  FEATURE_ADD_LCD 0x2
 #define  FEATURE_NO_BATT 0x4
 #define  FEATURE_ADD_ETHERNET 0x8
-
+#define  FEATURE_NO_POWER_KEY 0x10
 /* Known board names */
 #define BOARD_QC02          "QC02"
 #define BOARD_MF900         "MF900"

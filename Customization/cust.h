@@ -48,13 +48,13 @@ product_config_t g_mifi_board[BOARD_MAX] = {
         .board_name = "CP103",
         .rfc_name[0] = "rfc117.mbn",
         .rfc_name[1] = "rfc118-B20.mbn",
-        .feature_mask = 0xD,
+        .feature_mask = 0x1D,
     },
     {
         .board_name = "CP105",
-        .rfc_name[0] = "rfc113.mbn",
-        .rfc_name[1] = "rfc114.mbn",
-        .feature_mask = 0xD,
+        .rfc_name[0] = "rfc115.mbn",
+        .rfc_name[1] = "rfc116-B20.mbn",
+        .feature_mask = 0x1D,
     },
 };
 
