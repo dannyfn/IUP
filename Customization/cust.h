@@ -62,7 +62,7 @@ static char g_board_model_map[BOARD_MAX][16][PRODUCT_NAME_MAX_LEN] = {
     [BOARD_QC02]     = { "Default" },
     [BOARD_QC024200] = { "Default" },
     [BOARD_QC03]     = { "Default" },
-    [BOARD_MF900]    = { "Default","MF967" },
+    [BOARD_MF900]    = { "Default","MF967","MF900A"},
     [BOARD_CP103]    = { "Default","CPF967"},
     [BOARD_CP105]    = { "Default" },
 };
