@@ -6,6 +6,9 @@
 #include <iup.h>
 #include "devinfo.h"
 
+#ifndef VERSION_TAG
+#define VERSION_TAG "V1.0"
+#endif
 
 Ihandle *txt_boardname1, *txt_modelname1, *txt_bootmode1, *txt_featuremask1;
 Ihandle *txt_boardname2, *txt_modelname2, *txt_bootmode2, *txt_featuremask2;
@@ -422,7 +425,7 @@ int main(int argc, char **argv) {
     Ihandle *vbox = IupVbox(files_hbox, bottom_hbox, NULL);
     
     Ihandle *dlg = IupDialog(vbox);
-    IupSetAttribute(dlg, "TITLE", "MIFI配置工具V1.0");
+    IupSetfAttribute(dlg, "TITLE", "MIFI配置工具%s", VERSION_TAG);
     IupSetAttribute(dlg, "SIZE", "500x");
 
     ScanDevInfoFiles();

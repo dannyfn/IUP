@@ -1,6 +1,15 @@
 @echo off
 echo Compiling IUP DevInfo (static)...
-gcc DevInfo.c -o DevInfo.exe ^
+set GIT_TAG=
+for /f "tokens=*" %%i in ('git describe --tags --abbrev^=0 2^>nul') do set GIT_TAG=%%i
+
+if "%GIT_TAG%"=="" (
+    set VERSION_DEF=
+) else (
+    set VERSION_DEF=-DVERSION_TAG="\"%GIT_TAG%\""
+)
+
+gcc DevInfo.c -o DevInfo.exe %VERSION_DEF% ^
     -Os -s ^
     -ffunction-sections -fdata-sections -Wl,--gc-sections ^
     -I"%~dp0../sdk/include" ^

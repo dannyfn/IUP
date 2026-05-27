@@ -23,13 +23,13 @@ product_config_t g_mifi_board[BOARD_MAX] = {
     {
         .board_name = "QC02",
         .rfc_name[0] = "rfc113.mbn",
-        .rfc_name[1] = "rfc114.mbn",
+        .rfc_name[1] = "rfc114-B20.mbn",
         .feature_mask = 0x01,
     },    
     {
         .board_name = "QC024200",
         .rfc_name[0] = "rfc113.mbn",
-        .rfc_name[1] = "rfc114.mbn",
+        .rfc_name[1] = "rfc114-B20.mbn",
         .feature_mask = 0x01,
     },
     {

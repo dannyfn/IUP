@@ -12,6 +12,9 @@
 #undef BOARD_CP105
 #include "cust.h"
 
+#ifndef VERSION_TAG
+#define VERSION_TAG "V1.0.2"
+#endif
 #define MAX_MODEL_SIZE 16
 #define MAX_FILE_ITEM 4
 #define MAX_CUST_MBN_INFO 64
@@ -522,7 +525,7 @@ int main(int argc, char **argv) {
     IupSetAttribute(vbox, "ALIGNMENT", "ACENTER");
 
     Ihandle *dlg = IupDialog(vbox);
-    IupSetAttribute(dlg, "TITLE", "版本配置工具V1.0.2");
+    IupSetfAttribute(dlg, "TITLE", "版本配置工具%s", VERSION_TAG);
     IupSetAttribute(dlg, "MINBOX", "NO");
     IupSetAttribute(dlg, "MAXBOX", "NO");
     IupSetAttribute(dlg, "RESIZE", "NO");
