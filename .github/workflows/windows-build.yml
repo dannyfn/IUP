@@ -1,0 +1,96 @@
+name: Windows Build
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - "V*"
+      - "v*"
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build Windows tools
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup MSYS2 MinGW64
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >-
+            mingw-w64-x86_64-gcc
+
+      - name: Build Customization
+        shell: msys2 {0}
+        working-directory: Customization
+        run: |
+          set -euo pipefail
+          GIT_TAG="$(git describe --tags --abbrev=0 2>/dev/null || true)"
+          VERSION_DEF=()
+          if [ -n "$GIT_TAG" ]; then
+            VERSION_DEF=(-DVERSION_TAG="\\\"${GIT_TAG}\\\"")
+          fi
+          gcc Customization.c -o Customization.exe "${VERSION_DEF[@]}" \
+            -Os -s \
+            -ffunction-sections -fdata-sections -Wl,--gc-sections \
+            -I"../sdk/include" \
+            -L"../sdk" \
+            -liup -lmsvcrt_compat \
+            -lgdi32 -luser32 -lcomctl32 -lole32 -luuid -lcomdlg32 \
+            -mwindows
+
+      - name: Build DevInfo
+        shell: msys2 {0}
+        working-directory: DevInfo
+        run: |
+          set -euo pipefail
+          GIT_TAG="$(git describe --tags --abbrev=0 2>/dev/null || true)"
+          VERSION_DEF=()
+          if [ -n "$GIT_TAG" ]; then
+            VERSION_DEF=(-DVERSION_TAG="\\\"${GIT_TAG}\\\"")
+          fi
+          gcc DevInfo.c -o DevInfo.exe "${VERSION_DEF[@]}" \
+            -Os -s \
+            -ffunction-sections -fdata-sections -Wl,--gc-sections \
+            -I"../sdk/include" \
+            -L"../sdk" \
+            -liup -lmsvcrt_compat \
+            -lgdi32 -luser32 -lcomctl32 -lole32 -luuid -lcomdlg32 \
+            -mwindows
+
+      - name: Package artifacts
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist | Out-Null
+          Copy-Item Customization/Customization.exe dist/Customization.exe
+          Copy-Item DevInfo/DevInfo.exe dist/DevInfo.exe
+          Compress-Archive -Path dist/* -DestinationPath IUP-windows-tools.zip -Force
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: IUP-windows-tools
+          path: |
+            dist/Customization.exe
+            dist/DevInfo.exe
+            IUP-windows-tools.zip
+
+      - name: Publish GitHub Release on tag
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: IUP-windows-tools.zip
