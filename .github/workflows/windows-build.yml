@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   build:
-    name: Build Windows tools
+    name: Build Customization
     runs-on: windows-latest
 
     steps:
@@ -53,44 +53,20 @@ jobs:
             -lgdi32 -luser32 -lcomctl32 -lole32 -luuid -lcomdlg32 \
             -mwindows
 
-      - name: Build DevInfo
-        shell: msys2 {0}
-        working-directory: DevInfo
-        run: |
-          set -euo pipefail
-          GIT_TAG="$(git describe --tags --abbrev=0 2>/dev/null || true)"
-          VERSION_DEF=()
-          if [ -n "$GIT_TAG" ]; then
-            VERSION_DEF=(-DVERSION_TAG="\\\"${GIT_TAG}\\\"")
-          fi
-          gcc DevInfo.c -o DevInfo.exe "${VERSION_DEF[@]}" \
-            -Os -s \
-            -ffunction-sections -fdata-sections -Wl,--gc-sections \
-            -I"../sdk/include" \
-            -L"../sdk" \
-            -liup -lmsvcrt_compat \
-            -lgdi32 -luser32 -lcomctl32 -lole32 -luuid -lcomdlg32 \
-            -mwindows
-
-      - name: Package artifacts
+      - name: Package artifact
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force dist | Out-Null
           Copy-Item Customization/Customization.exe dist/Customization.exe
-          Copy-Item DevInfo/DevInfo.exe dist/DevInfo.exe
-          Compress-Archive -Path dist/* -DestinationPath IUP-windows-tools.zip -Force
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: IUP-windows-tools
-          path: |
-            dist/Customization.exe
-            dist/DevInfo.exe
-            IUP-windows-tools.zip
+          name: Customization
+          path: dist/Customization.exe
 
       - name: Publish GitHub Release on tag
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: IUP-windows-tools.zip
+          files: dist/Customization.exe
